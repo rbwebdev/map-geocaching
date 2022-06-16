@@ -3,6 +3,7 @@ var lon = 2.349903;
 var macarte = null;
 var markerClusters;
 var geocaches = {
+'GC8WJ9V': { 'lat': 50.705833, 'lon': 3.168967 },
 'GC8WNAQ': { 'lat': 50.682817, 'lon': 3.196067 },
 'GC693VR': { 'lat': 50.701183, 'lon': 3.0422 },
 'GC69G86': { 'lat': 50.700297, 'lon': 3.04349 },
