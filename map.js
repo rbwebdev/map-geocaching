@@ -3,6 +3,7 @@ let lon = 2.349903
 let macarte = null
 let markerClusters
 const geocaches = {
+  'GC9T5R2': { 'lat': 51.001600, 'lon':2.086433 },
   'GC9XF21': { 'lat': 50.700617, 'lon': 3.159417 },
   'GC9XW6E': { 'lat': 50.695100, 'lon': 3.163350 },
   'GC80YR7': {'lat': 50.698167, 'lon': 3.164033},
