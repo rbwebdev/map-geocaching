@@ -3,6 +3,25 @@ let lon = 2.349903
 let macarte = null
 let markerClusters
 const geocaches = {
+  'GCB39M4': {'pos': 'N 50° 40.755 E 003° 10.232'},
+  'GCBB7TW': {'pos': 'N 51° 00.380 E 002° 05.925'},
+  'GC7Z5CX': {'pos': 'N 46° 51.207 E 000° 55.873'},
+  'GC3WC8T': {'pos': 'N 47° 23.782 E 000° 40.674'},
+  'GC5Z3T8': {'pos': 'N 47° 13.102 W 001° 32.484'},
+  'GCABHC1': {'pos': 'N 47° 12.280 W 001° 33.850'},
+  'GCB5F72': {'pos': 'N 48° 46.871 W 003° 15.462'},
+  'GCB3N6B': {'pos': 'N 48° 46.798 W 003° 15.565'},
+  'GCB5F6R': {'pos': 'N 48° 46.970 W 003° 15.364'},
+  'GCB3N5R': {'pos': 'N 48° 47.126 W 003° 15.182'},
+  'GCB5F6D': {'pos': 'N 48° 47.216 W 003° 15.162'},
+  'GCB5F63': {'pos': 'N 48° 47.367 W 003° 15.100'},
+  'GCB5F5N': {'pos': 'N 48° 47.432 W 003° 14.883'},
+  'GCB3N59': {'pos': 'N 48° 47.467 W 003° 14.727'},
+  'GC4QH26': {'pos': 'N 48° 52.002 W 003° 13.908'},
+  'GC7C924': {'pos': 'N 48° 47.247 W 003° 30.614'},
+  'GC7C930': {'pos': 'N 48° 47.240 W 003° 30.762'},
+  'GC7C96J': {'pos': 'N 48° 47.163 W 003° 31.061'},
+  'GC68E9D': {'pos': 'N 48° 40.921 W 001° 24.690'},
   'GC9T5R2': { 'lat': 51.001600, 'lon':2.086433 },
   'GC9XF21': { 'lat': 50.700617, 'lon': 3.159417 },
   'GC9XW6E': { 'lat': 50.695100, 'lon': 3.163350 },
@@ -296,10 +315,13 @@ function initMap() {
       iconAnchor: [25, 50],
       popupAnchor: [-3, -76],
     })
-    let marker = L.marker([geocaches[geocache].lat, geocaches[geocache].lon], {icon: myIcon})
-    marker.bindPopup('<a href="https://www.geocaching.com/geocache/' + geocache + '" target="_blank">' + geocache + '</a>')
-    markerClusters.addLayer(marker)
-    markers.push(marker)
+    let coords = parseCoordinates(geocaches[geocache]);
+    if (coords) {
+      let marker = L.marker(coords, {icon: myIcon})
+      marker.bindPopup('<a href="https://www.geocaching.com/geocache/' + geocache + '" target="_blank">' + geocache + '</a>')
+      markerClusters.addLayer(marker)
+      markers.push(marker)
+    }
   }
   const count = document.getElementById('count')
   count.innerText = markers.length
@@ -309,4 +331,22 @@ function initMap() {
 }
 window.onload = function(){
   initMap() 
+}
+
+function parseCoordinates(entry) {
+  if (entry.lat !== undefined && entry.lon !== undefined) {
+    return [entry.lat, entry.lon];
+  } else if (entry.pos) {
+    const regex = /([NS])\s*(\d+)°\s*([\d.]+)\s*([EW])\s*(\d+)°\s*([\d.]+)/;
+    const match = entry.pos.match(regex);
+    if (match) {
+      let [, ns, latDeg, latMin, ew, lonDeg, lonMin] = match;
+      let lat = parseInt(latDeg, 10) + parseFloat(latMin) / 60;
+      let lon = parseInt(lonDeg, 10) + parseFloat(lonMin) / 60;
+      if (ns === 'S') lat = -lat;
+      if (ew === 'W') lon = -lon;
+      return [lat, lon];
+    }
+  }
+  return null;
 }
